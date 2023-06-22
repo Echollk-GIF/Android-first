@@ -307,6 +307,103 @@ SuperToast.show("加载中");
 
 
 
+# 笔记项目提示
+
+## 通用控制器整体规划和实现
+
+此处并不是必须的，只是方便逻辑清晰
+
+BaseActivity：把onPostCreate逻辑拆分为三个方法，方便管理。
+
+```java
+/**
+ * 所有Activity父类
+ */
+public class BaseActivity extends AppCompatActivity {
+    /**
+     * 找控件
+     */
+    protected void initViews(){
+
+    }
+
+    /**
+     * 设置数据
+     */
+    protected void initDatum() {
+
+    }
+
+    /**
+     * 设置监听器
+     */
+    protected void initListeners() {
+
+    }
+
+    /**
+     * 在onCreate方法后面调用
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        initViews();
+        initDatum();
+        initListeners();
+    }
+
+}
+```
+
+## 遇到的一些报错
+
+### Cannot resolve constructor 'Intent(OnClickListener, Class<DialogPageActivity>)'
+
+```java
+ //错误代码示例
+protected void initListeners() {
+    super.initListeners();
+    dialog_page_button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(this,DialogPageActivity.class);
+      }
+    });
+  }
+```
+
+这个报错是由于`Intent`构造函数的参数不正确导致的。具体原因可能是在创建Intent对象时所传递的参数中，第一个参数`OnClickListener`是一个匿名内部类，而`Intent`构造函数的第一个参数要求是一个上下文对象。因此，可以将第一个参数修改为一个普通的`Context`对象，如下所示：
+
+```java
+Intent intent = new Intent(context, DialogPageActivity.class); 
+```
+
+同时，确保页面已经在`AndroidManifest.xml`文件中进行了注册
+
+所以可以使用例如如下代码
+
+```java
+public class MyActivity extends Activity{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyActivity.this, DialogPageActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+}
+```
+
+这样，当执行到创建 `Intent` 对象的代码时，就能够正常创建，并跳转到指定的页面。
+
 # 控件
 
 ## TextView
@@ -3711,54 +3808,6 @@ public class BaseLogicActivity extends BaseCommonActivity {
 
 
 # 重点内容
-
-## 通用控制器整体规划和实现
-
-BaseActivity：把onPostCreate逻辑拆分为三个方法，方便管理。
-	BaseCommonActivity：不同项目可以复用的逻辑，例如：启动界面等
-		BaseLogicActivity：本项目的通用逻辑，例如：背景颜色，全局迷你播放控制等。
-			BaseTitleActivity：标题相关。
-
-```java
-/**
- * 所有Activity父类
- */
-public class BaseActivity extends AppCompatActivity {
-    /**
-     * 找控件
-     */
-    protected void initViews(){
-
-    }
-
-    /**
-     * 设置数据
-     */
-    protected void initDatum() {
-
-    }
-
-    /**
-     * 设置监听器
-     */
-    protected void initListeners() {
-
-    }
-
-    /**
-     * 在onCreate方法后面调用
-     * @param savedInstanceState
-     */
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        initViews();
-        initDatum();
-        initListeners();
-    }
-
-}
-```
 
 # 需要练习的
 

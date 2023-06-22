@@ -4,12 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".activity.components.dialog.DialogPageActivity">
   <Button
-    android:id="@+id/dialog_page_button"
-    android:text="点击跳转到对话框选择页面"
+    android:text="Dialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
-
 </LinearLayout>
