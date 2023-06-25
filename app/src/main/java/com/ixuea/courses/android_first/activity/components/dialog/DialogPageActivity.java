@@ -22,7 +22,8 @@ public class DialogPageActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         TextDialogFragment dialog = new TextDialogFragment();
-        dialog.setText("文本内容");
+        dialog.setTitle("发现新版本:7.47.6.0");
+        dialog.setText("1.注册登录页交互、视觉优化 2.修复部分已知问题 3.测试文字-测试文字");
         dialog.setPositiveListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {

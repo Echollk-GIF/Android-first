@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -14,11 +15,14 @@ import com.ixuea.courses.android_first.R;
 import com.ixuea.courses.android_first.util.ScreenUtil;
 
 public class TextDialogFragment extends DialogFragment {
-
+  private String title;
   private String text;
   private View.OnClickListener positiveListener;
   private View.OnClickListener negativeListener;
 
+  public void setTitle(String title) {
+    this.title = title;
+  }
   public void setText(String text) {
     this.text = text;
   }
@@ -31,11 +35,21 @@ public class TextDialogFragment extends DialogFragment {
     this.negativeListener = negativeListener;
   }
 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    //点击弹窗外边不能关闭
+    setCancelable(false);
+  }
+
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_text_dialog, container, false);
 
     TextView textView = view.findViewById(R.id.text);
     textView.setText(text);
+
+    TextView titleView = view.findViewById(R.id.title);
+    titleView.setText(title);
 
     Button positiveButton = view.findViewById(R.id.positive_button);
     positiveButton.setOnClickListener(positiveListener);
