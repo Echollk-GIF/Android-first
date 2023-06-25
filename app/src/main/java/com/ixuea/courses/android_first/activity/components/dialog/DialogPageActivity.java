@@ -28,12 +28,14 @@ public class DialogPageActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             // 点击确认按钮时执行的操作
+            dialog.dismiss();
           }
         });
         dialog.setNegativeListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             // 点击取消按钮时执行的操作
+            dialog.dismiss();
           }
         });
         dialog.show(getSupportFragmentManager(), "textDialog");
