@@ -792,7 +792,7 @@ setNeutralButton：设置中性按钮的信息，包括按钮文本和点击监�
 5. 调用create()方法创建这个对象，再调用show()方法将对话框显示出来。
 
 ```java
-public class MyDialogFragment extends BaseDialogFragment {
+public class MyDialogFragment extends DialogFragment {
     private String text;
     private View.OnClickListener positiveListener;
     private View.OnClickListener negativeListener;
@@ -849,7 +849,7 @@ dialog.setNegativeListener(new View.OnClickListener() {
         // 点击取消按钮时执行的操作
     }
 });
-dialog.show(getFragmentManager(), "MyDialogFragment");
+dialog.show(getSupportFragmentManager(), "MyDialogFragment");
 
 ```
 

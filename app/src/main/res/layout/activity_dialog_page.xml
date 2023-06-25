@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".activity.components.dialog.DialogPageActivity">
   <Button
-    android:text="Dialog"
+    android:id="@+id/textDialog"
+    android:text="textDialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
 </LinearLayout>
