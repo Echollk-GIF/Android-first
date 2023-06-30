@@ -1423,123 +1423,96 @@ public class GuideAdapter extends FragmentStatePagerAdapter {
 
 ### Tab栏切换
 
-由于TabLayout和TabLayout内部组件TabItem在material包中，需要添加material包的依赖才能使用。打开项目app下的build.gradle，在闭包dependencies中添加下面一行代码
+在 Android 中，可以使用 TabLayout 和 ViewPager 来实现Tab栏切换页面的功能。下面是一种基本的实现方法：
 
-```
-implementation 'com.google.android.material:material:1.1.0'
-```
-
-布局
+1. 首先，在你的布局文件中添加 TabLayout 和 ViewPager 组件。
 
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.tabs.TabLayout
+    android:id="@+id/tabLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:tabMode="fixed"
+    app:tabGravity="fill"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/item_active"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="新闻" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/item_news"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="资源" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/item_resouece"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活跃达人" />
-    </com.google.android.material.tabs.TabLayout>
-
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.viewpager.widget.ViewPager>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+<androidx.viewpager.widget.ViewPager
+    android:id="@+id/viewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 ```
 
-我们使用约束布局。首先添加TabLayout，宽度选择适应父布局，高度选择自适应。然后想要滑动切换视图，必须在TabLayout中加入TabItem组件，有多少个页面进行切换，就加入多少个TabItem。最后加入ViewPager，让他充满整个布局。
-
-Activity代码
+2. 在代码中初始化 TabLayout 和 ViewPager，并将它们关联起来。
 
 ```java
-//Activity中我们大致可能分成两步走：
-//1. 为ViewPager 创建Adapter
-//2. ViewPager 与TabLayout的绑定
-public class CommunityFragment extends Fragment {
+// 初始化 TabLayout
+TabLayout tabLayout = findViewById(R.id.tabLayout);
 
-    DemoCollectionPagerAdapter demoCollectionPagerAdapter;
-    ActiveFragment activeFragment = new ActiveFragment();
-    NewsFragment newsFragment = new NewsFragment();
-    ResourceFragment resourceFragment = new ResourceFragment();
+// 初始化 ViewPager
+ViewPager viewPager = findViewById(R.id.viewPager);
 
+// 创建一个适配器，用于提供 ViewPager 的内容
+PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager()); // 这里需要根据你的需求自定义 PagerAdapter
+
+// 设置 ViewPager 的适配器
+viewPager.setAdapter(pagerAdapter);
+
+// 将 TabLayout 和 ViewPager 关联起来
+tabLayout.setupWithViewPager(viewPager);
+```
+
+3. 自定义 PagerAdapter 类，用于提供 ViewPager 的内容。
+
+```java
+public class PagerAdapter extends FragmentPagerAdapter {
+    private static final int NUM_PAGES = 3; // 页数
+
+    public PagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
+    @NonNull
+    @Override
+    public Fragment getItem(int position) {
+        // 根据位置返回对应的 Fragment
+        switch (position) {
+            case 0:
+                return new Fragment1();
+            case 1:
+                return new Fragment2();
+            case 2:
+                return new Fragment3();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getCount() {
+        // 返回总页数
+        return NUM_PAGES;
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_community, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //ViewPager 与TabLayout的绑定
-        demoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getChildFragmentManager());
-      //获取界面布局文件中ViewPager 和TabLayout 组件
-        ViewPager viewPager = view.findViewById(R.id.pager);
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        if (viewPager == null) {
-            return;
-        } else {
-          //为ViewPager设置Adapte
-            viewPager.setAdapter(demoCollectionPagerAdapter);
-          //在ViewPager中使用addOnPageChangeListener方法绑定TabLayout。在TabLayout中使用addOnTabSelectedListener方法绑定ViewPager，这样即可完成ViewPager与TabLayout的结合
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-        }
-    }
-  
-  //创建Adapter
-    public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
-
-        public DemoCollectionPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            if (i == 0) {
-                return newsFragment;
-            }
-            if (i == 1) {
-                return resourceFragment;
-            }
-            return activeFragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
+    public CharSequence getPageTitle(int position) {
+        // 返回对应位置的标签名称
+        switch (position) {
+            case 0:
+                return "Tab 1";
+            case 1:
+                return "Tab 2";
+            case 2:
+                return "Tab 3";
+            default:
+                return "";
         }
     }
 }
-
 ```
+
+在上面的代码中，你需要自定义 Fragment1、Fragment2、Fragment3 作为每个标签对应的 Fragment。
+
+通过以上步骤，就可以实现 Tab栏切换页面的功能。每个标签对应一个 Fragment，通过滑动或点击标签可以切换到对应的页面。
 
 ## HorizontalScrollView
 
