@@ -1,6 +1,9 @@
 package com.ixuea.courses.android_first.activity.components.sendGoods;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -40,5 +43,46 @@ public class SendGoodsActivity extends BaseActivity {
     viewPager.setAdapter(pagerAdapter);
     // 将 TabLayout 和 ViewPager 关联起来
     tabLayout.setupWithViewPager(viewPager);
+
+    // 自定义标签样式
+    for (int i = 0; i < tabLayout.getTabCount(); i++) {
+      TabLayout.Tab tab = tabLayout.getTabAt(i);
+      if (tab != null) {
+        tab.setCustomView(R.layout.custom_tab);
+        TextView customTab = tab.getCustomView().findViewById(R.id.tab_title);
+        customTab.setText(tab.getText());
+      }
+    }
+
+    // 设置第一个Tab项为选中状态
+    TabLayout.Tab firstTab = tabLayout.getTabAt(0); // 根据实际情况修改索引值
+    if (firstTab != null) {
+      View view = firstTab.getCustomView();
+      TextView customTab = view.findViewById(R.id.tab_title);
+      customTab.setTextColor(Color.RED);
+    }
+
+    // 设置选项卡选择监听
+    tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+      @Override
+      public void onTabSelected(TabLayout.Tab tab) {
+        View view = tab.getCustomView();
+        TextView customTab = view.findViewById(R.id.tab_title);
+        customTab.setTextColor(Color.RED);
+      }
+
+      @Override
+      public void onTabUnselected(TabLayout.Tab tab) {
+        View view = tab.getCustomView();
+        TextView customTab = view.findViewById(R.id.tab_title);
+        customTab.setTextColor(Color.BLACK);
+      }
+
+      @Override
+      public void onTabReselected(TabLayout.Tab tab) {
+        // 可选，当再次选中Tab项时触发
+      }
+    });
   }
+
 }
