@@ -60,6 +60,7 @@ public class SendGoodsActivity extends BaseActivity {
       View view = firstTab.getCustomView();
       TextView customTab = view.findViewById(R.id.tab_title);
       customTab.setTextColor(Color.RED);
+      customTab.setTextSize(18);
     }
 
     // 设置选项卡选择监听
@@ -69,6 +70,7 @@ public class SendGoodsActivity extends BaseActivity {
         View view = tab.getCustomView();
         TextView customTab = view.findViewById(R.id.tab_title);
         customTab.setTextColor(Color.RED);
+        customTab.setTextSize(18);
       }
 
       @Override
@@ -76,6 +78,7 @@ public class SendGoodsActivity extends BaseActivity {
         View view = tab.getCustomView();
         TextView customTab = view.findViewById(R.id.tab_title);
         customTab.setTextColor(Color.BLACK);
+        customTab.setTextSize(14);
       }
 
       @Override
