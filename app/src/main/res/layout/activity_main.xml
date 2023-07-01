@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+  android:orientation="vertical"
     tools:context=".MainActivity">
 
   <Button
@@ -15,6 +16,12 @@
   <Button
     android:id="@+id/sendGoods_page_button"
     android:text="点击跳转到发货页"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
+  <Button
+    android:id="@+id/popup_page_button"
+    android:text="点击跳转到底部弹窗选择页面"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
 
