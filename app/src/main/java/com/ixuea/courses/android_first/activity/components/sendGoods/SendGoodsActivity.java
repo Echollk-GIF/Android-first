@@ -1,5 +1,6 @@
 package com.ixuea.courses.android_first.activity.components.sendGoods;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +44,9 @@ public class SendGoodsActivity extends BaseActivity {
     viewPager.setAdapter(pagerAdapter);
     // 将 TabLayout 和 ViewPager 关联起来
     tabLayout.setupWithViewPager(viewPager);
+
+    //删除点击的默认动画效果
+    tabLayout.setTabRippleColor(ColorStateList.valueOf(Color.TRANSPARENT));
 
     // 自定义标签样式
     for (int i = 0; i < tabLayout.getTabCount(); i++) {
