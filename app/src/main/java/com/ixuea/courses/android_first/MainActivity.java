@@ -7,8 +7,8 @@ import android.widget.Button;
 
 
 import com.ixuea.courses.android_first.activity.BaseActivity;
-import com.ixuea.courses.android_first.activity.components.dialog.DialogPageActivity;
-import com.ixuea.courses.android_first.activity.components.sendGoods.SendGoodsActivity;
+import com.ixuea.courses.android_first.components.dialog.DialogPageActivity;
+import com.ixuea.courses.android_first.components.sendGoods.SendGoodsActivity;
 import com.ixuea.courses.android_first.popup.PopupActivity;
 
 public class MainActivity extends BaseActivity {

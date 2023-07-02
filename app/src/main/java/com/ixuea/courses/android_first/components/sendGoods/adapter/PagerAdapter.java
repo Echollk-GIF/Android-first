@@ -1,4 +1,4 @@
-package com.ixuea.courses.android_first.activity.components.sendGoods.adapter;
+package com.ixuea.courses.android_first.components.sendGoods.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.ixuea.courses.android_first.activity.components.sendGoods.fragment.Page1;
+import com.ixuea.courses.android_first.components.sendGoods.fragment.Page1;
 
 public class PagerAdapter extends FragmentPagerAdapter {
   private static final int NUM_PAGES = 3; // 页数

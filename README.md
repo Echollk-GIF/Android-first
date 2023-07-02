@@ -81,41 +81,6 @@ inflater.inflate(R.layout.fragment_dialog_term_service,container,false);
       },1000);
 ```
 
-
-
-# 做了什么
-
-## 深色模式
-
-谷歌官网深色模式文档
-
-https://developer.android.google.cn/guide/topics/ui/look-and-feel/darktheme
-
-需继承Theme.MaterialComponents.DayNight
-
-定义不同的颜色值在values/themes.xml，values-night/themes.xml，对不同名称的颜色设置不同值
-
-手动引用如下：
-
-```
-android:background="?android:attr/colorBackground"
-```
-
-
-
-非矢量图
-
-在drawable-xxhdpi，drawable-night-xxhdpi分别放白天和夜间模式图片，名称一样。
-
-## 通用控制器整体规划和实现
-
-```
-BaseActivity：把onPostCreate逻辑拆分为三个方法，方便管理。
-	BaseCommonActivity：不同项目可以复用的逻辑，例如：启动界面等
-		BaseLogicActivity：本项目的通用逻辑，例如：背景颜色，全局迷你播放控制等。
-			BaseTitleActivity：标题相关。
-```
-
 # API
 
 ## Toast
@@ -2592,195 +2557,59 @@ public class SuperProcessUtil {
 
 # 广播
 
-与广播有关的方法主要有以下3个。
+在Android应用开发中，使用广播涉及以下几个步骤：
 
-sendBroadcast：发送广播。
-
-registerReceiver：注册广播的接收器，可在onStart或onResume方法中注册接收器。
-
-unregisterReceiver：注销广播的接收器，可在onStop或onPause方法中注销接收器。
-
-
-## 收发应用广播
-
-### 标准广播
-
-定义一个广播接收器：
-
-// 定义一个标准广播的接收器
-public class StandardReceiver extends BroadcastReceiver {
+1. 定义广播接收器（BroadcastReceiver）：首先，你需要创建一个广播接收器类，用于接收广播并对接收到的广播消息进行处理。广播接收器需要继承自BroadcastReceiver，并实现其onReceive()方法。在onReceive()方法中，你可以编写接收到广播后需要执行的逻辑代码。
 
 ```java
-// 定义一个标准广播的接收器
-public class StandardReceiver extends BroadcastReceiver {
-
-    public static final String STANDARD_ACTION = "com.example.broadcaststudy.standard";
-
-    // 一旦接收到标准广播，马上触发接收器的onReceive方法
+public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent != null && intent.getAction().equals(STANDARD_ACTION)){
-            Log.d("hhh", "收到一个标准广播");
-        }
+        // 在此处处理接收到的广播消息
     }
 }
 ```
 
-在Activity中动态注册接收器：
+2. 注册广播接收器：接下来，你需要在你的应用中注册广播接收器，以便系统（或应用内的其他组件）能够发送广播时接收到。
 
+   - 静态注册：可以在AndroidManifest.xml文件中的<application>标签下注册广播接收器。使用<receiver>标签来定义接收器，并为它指定intent过滤器，以指定接收的广播类型。
+
+```xml
+<receiver android:name=".MyBroadcastReceiver">
+    <intent-filter>
+        <action android:name="com.example.MY_ACTION" />
+    </intent-filter>
+</receiver>
+```
+
+   - 动态注册：除了静态注册，你还可以在代码中动态注册广播接收器。这通常在需要在特定条件下注册和取消注册广播接收器时使用。
 
 ```java
-public class BroadcastStandardActivity extends AppCompatActivity {
+// 创建广播接收器实例
+MyBroadcastReceiver receiver = new MyBroadcastReceiver();
+IntentFilter filter = new IntentFilter("com.example.MY_ACTION");
 
-    private StandardReceiver standardReceiver;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_broadcast_standard);
-
-        findViewById(R.id.btn_send_standard).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //发送标准广播
-                Intent intent = new Intent(standardReceiver.STANDARD_ACTION);
-                sendBroadcast(intent);
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        standardReceiver = new StandardReceiver();
-        // 创建一个意图过滤器，只处理STANDARD_ACTION的广播
-        IntentFilter filter = new IntentFilter(StandardReceiver.STANDARD_ACTION);
-        // 注册接收器，注册之后才能正常接收广播
-        registerReceiver(standardReceiver, filter);
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // 注销接收器，注销之后就不再接收广播
-        unregisterReceiver(standardReceiver);
-    }
-}
-
+// 注册广播接收器
+registerReceiver(receiver, filter);
 ```
 
-### 有序广播
-
-由于广播没指定唯一的接收者，因此可能存在多个接收器，每个接收器都拥有自己的处理逻辑。这些接收器默认是都能够接受到指定广播并且是之间的顺序按照注册的先后顺序，也可以通过指定优先级来指定顺序。
-
-先收到广播的接收器A，既可以让其他接收器继续收听广播，也可以中断广播不让其他接收器收听。
+3. 发送广播：要发送广播，你需要创建一个Intent对象，并使用sendBroadcast()或sendOrderedBroadcast()方法将其发送出去。
 
 ```java
-public class BroadOrderActivity extends AppCompatActivity implements View.OnClickListener {
-
-    public static final String ORDER_ACTION = "com.example.broadcaststudy.order";
-    private OrderAReceiver orderAReceiver;
-    private OrderBReceiver orderBReceiver;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_broad_order);
-        findViewById(R.id.btn_send_order).setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        // 创建一个指定动作的意图
-        Intent intent = new Intent(ORDER_ACTION);
-        // 发送有序广播
-        sendOrderedBroadcast(intent, null);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // 多个接收器处理有序广播的顺序规则为：
-        // 1、优先级越大的接收器，越早收到有序广播；
-        // 2、优先级相同的时候，越早注册的接收器越早收到有序广播
-        orderAReceiver = new OrderAReceiver();
-        IntentFilter filterA = new IntentFilter(ORDER_ACTION);
-        filterA.setPriority(8);
-        registerReceiver(orderAReceiver, filterA);
-
-        orderBReceiver = new OrderBReceiver();
-        IntentFilter filterB = new IntentFilter(ORDER_ACTION);
-        filterB.setPriority(10);
-        registerReceiver(orderBReceiver, filterB);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(orderAReceiver);
-        unregisterReceiver(orderBReceiver);
-    }
-}
-
+Intent intent = new Intent("com.example.MY_ACTION");
+intent.putExtra("key", "value");
+sendBroadcast(intent);
 ```
 
-### 静态广播
+通过调用sendBroadcast()方法，你可以发送一个标准广播，该广播将无序地发送给所有匹配的监听器。如果你需要有序地发送广播，并确保接收器按照特定的顺序接收广播，你可以使用sendOrderedBroadcast()方法。
 
-广播也可以通过静态代码的方式来进行注册。广播接收器也能在AndroidManifest.xml注册，并且注册时候的节点名为receiver，一旦接收器在AndroidManifest.xml注册，就无须在代码中注册了。
-
-之所以罕见静态注册，是因为静态注册容易导致安全问题，故而Android 8.0之后废弃了大多数静态注册。
-
-
-## 监听系统广播
-
-除了应用自身的广播，系统也会发出各式各样的广播，通过监听这些系统广播，App能够得知周围环境发生了什么变化，从而按照最新环境调整运行逻辑。
-
-### 监听网络变更广播
+4. 解除注册广播接收器：如果你通过动态注册的方式注册了广播接收器，在合适的时机（如Activity的onDestroy()方法中），要记得调用unregisterReceiver()方法来取消注册广播接收器。
 
 ```java
-// 定义一个网络变更的广播接收器
-private class NetworkReceiver extends BroadcastReceiver {
-    // 一旦接收到网络变更的广播，马上触发接收器的onReceive方法
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent != null) {
-            NetworkInfo networkInfo = intent.getParcelableExtra("networkInfo");
-            String networkClass =
-                NetworkUtil.getNetworkClass(networkInfo.getSubtype());
-            desc = String.format("%s\n%s 收到一个网络变更广播，网络大类为%s，" +
-                                 "网络小类为%s，网络制式为%s，网络状态为%s",
-                                 desc, DateUtil.getNowTime(),
-                                 networkInfo.getTypeName(),
-                                 networkInfo.getSubtypeName(), networkClass,
-                                 networkInfo.getState().toString());
-            tv_network.setText(desc);
-        }
-    }
-}
-
+unregisterReceiver(receiver);
 ```
 
-```java
-@Override
-protected void onStart() {
-    super.onStart();
-    networkReceiver = new NetworkReceiver(); // 创建一个网络变更的广播接收器
-    // 创建一个意图过滤器，只处理网络状态变化的广播
-    IntentFilter filter = new
-        IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-    registerReceiver(networkReceiver, filter); // 注册接收器，注册之后才能正常接收广播
-}
-@Override
-protected void onStop() {
-    super.onStop();
-    unregisterReceiver(networkReceiver); // 注销接收器，注销之后就不再接收广播
-}
-
-```
+以上是使用广播的基本步骤。通过定义广播接收器、注册广播接收器、发送广播以及解除注册广播接收器，你可以实现应用内的广播通信，监听系统广播，或与其他应用进行跨应用通信。
 
 # 服务组件 Service
 
@@ -3783,11 +3612,5 @@ public class BaseLogicActivity extends BaseCommonActivity {
 # 重点内容
 
 # 需要练习的
-
-对话框
-
-Tab切换
-
-RecycleView
 
 输入框+Toast

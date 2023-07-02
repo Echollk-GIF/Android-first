@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.components.dialog.DialogPageActivity">
+    tools:context=".components.dialog.DialogPageActivity">
   <Button
     android:id="@+id/textDialog"
     android:text="textDialog"

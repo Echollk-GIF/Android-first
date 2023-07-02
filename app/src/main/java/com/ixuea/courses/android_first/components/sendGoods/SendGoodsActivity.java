@@ -1,4 +1,4 @@
-package com.ixuea.courses.android_first.activity.components.sendGoods;
+package com.ixuea.courses.android_first.components.sendGoods;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,7 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.ixuea.courses.android_first.R;
 import com.ixuea.courses.android_first.activity.BaseActivity;
-import com.ixuea.courses.android_first.activity.components.sendGoods.adapter.PagerAdapter;
+import com.ixuea.courses.android_first.components.sendGoods.adapter.PagerAdapter;
 
 public class SendGoodsActivity extends BaseActivity {
 

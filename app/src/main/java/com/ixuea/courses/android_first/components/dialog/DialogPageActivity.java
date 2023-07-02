@@ -1,4 +1,4 @@
-package com.ixuea.courses.android_first.activity.components.dialog;
+package com.ixuea.courses.android_first.components.dialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 

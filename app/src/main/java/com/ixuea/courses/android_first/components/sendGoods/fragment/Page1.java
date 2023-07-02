@@ -1,18 +1,17 @@
-package com.ixuea.courses.android_first.activity.components.sendGoods.fragment;
+package com.ixuea.courses.android_first.components.sendGoods.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ixuea.courses.android_first.R;
-import com.ixuea.courses.android_first.activity.components.sendGoods.Item;
-import com.ixuea.courses.android_first.activity.components.sendGoods.adapter.ItemAdapter;
+import com.ixuea.courses.android_first.components.sendGoods.Item;
+import com.ixuea.courses.android_first.components.sendGoods.adapter.ItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.ixuea.courses.android_first.activity.components.sendGoods;
+package com.ixuea.courses.android_first.components.sendGoods;
 
 public class Item {
   private String id;

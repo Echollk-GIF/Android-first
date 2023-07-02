@@ -15,17 +15,17 @@
     <activity
       android:name=".popup.PopupActivity"
       android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+<!--      <intent-filter>-->
+<!--        <action android:name="android.intent.action.MAIN" />-->
 
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
+<!--        <category android:name="android.intent.category.LAUNCHER" />-->
+<!--      </intent-filter>-->
     </activity>
     <activity
-      android:name=".activity.components.dialog.DialogPageActivity"
+      android:name=".components.dialog.DialogPageActivity"
       android:exported="false" />
     <activity
-      android:name=".activity.components.sendGoods.SendGoodsActivity"
+      android:name=".components.sendGoods.SendGoodsActivity"
       android:exported="true"></activity>
     <activity
       android:name=".MainActivity"
